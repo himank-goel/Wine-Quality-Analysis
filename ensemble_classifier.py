@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 from sklearn import model_selection
+from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
@@ -29,12 +30,17 @@ data = pd.read_csv(dataset_url, sep=';')
 Y = data.quality
 X = data.drop('quality', axis=1)
 X_train, X_test, Y_train, Y_test = model_selection.train_test_split(
-    X, Y, test_size=0.25, random_state=123, stratify=Y)
+    X, Y, test_size=0.4, random_state=123, stratify=Y)
 
+#Preprocesing
+scaler = preprocessing.StandardScaler().fit(X_train)
+
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
 
 # Setting the Classifiers
-classifiers = [RandomForestClassifier(n_estimators=10, criterion='gini'), RandomForestClassifier(n_estimators=10, criterion='entropy'), ExtraTreesClassifier(
-    n_estimators=10, criterion='gini'), ExtraTreesClassifier(n_estimators=10, criterion='entropy'), GradientBoostingClassifier(n_estimators=10)]
+classifiers = [RandomForestClassifier(n_estimators=100, criterion='gini'), RandomForestClassifier(n_estimators=100, criterion='entropy'), ExtraTreesClassifier(
+    n_estimators=100, criterion='gini'), ExtraTreesClassifier(n_estimators=100, criterion='entropy'), GradientBoostingClassifier(n_estimators=10)]
 
 Y_pred = [[] for i in xrange(len(classifiers))]
 
