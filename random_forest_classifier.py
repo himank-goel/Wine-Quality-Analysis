@@ -28,15 +28,15 @@ data = pd.read_csv(dataset_url, sep=';')
 Y = data.quality
 X = data.drop('quality', axis=1)
 X_train, X_test, Y_train, Y_test = model_selection.train_test_split(
-    X, Y, test_size=0.3, random_state=123, stratify=Y)
+    X, Y, test_size=0.25, random_state=123, stratify=Y)
 
 # Preprocessing the Data
 pipeline = make_pipeline(preprocessing.StandardScaler(),
-                         RandomForestClassifier(n_estimators=100))
+                         RandomForestClassifier(n_estimators=500, criterion='entropy'))
 
 # Setting the HyperParameters
 hyperparameters = {'randomforestclassifier__max_features': [
-    'auto', 'sqrt', 'log2'], 'randomforestclassifier__max_depth': [None, 5, 3, 1]}
+    'auto', 'sqrt', 'log2'], 'randomforestclassifier__max_depth': [None, 5, 3, 1, 7]}
 
 # Fitting the classfier
 clf = GridSearchCV(pipeline, hyperparameters, cv=5)
